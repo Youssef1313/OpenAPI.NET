@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.10.0](https://github.com/microsoft/OpenAPI.NET/compare/v2.9.0...v2.10.0) (2026-06-26)
+
+
+### Features
+
+* **library:** support schema keywords on references ([2749463](https://github.com/microsoft/OpenAPI.NET/commit/2749463f1ec1d452ba2334876d32466ea45ee8d1)), closes [#2903](https://github.com/microsoft/OpenAPI.NET/issues/2903)
+
+
+### Bug Fixes
+
+* **library:** keep v3 schema references ref-only ([8d811c3](https://github.com/microsoft/OpenAPI.NET/commit/8d811c3e76a8963be6e7a605b80c98d0ea0c63a5))
+* preserve JSON Schema 2020-12 keyword siblings on $ref schemas for OAS 3.1+ ([#2896](https://github.com/microsoft/OpenAPI.NET/issues/2896)) ([fb20d46](https://github.com/microsoft/OpenAPI.NET/commit/fb20d460ffe95505847da5a6e4c6fc065e41d9d1))
+* preserve JSON Schema 2020-12 keyword siblings on $ref schemas for OAS 3.1+ ([#2896](https://github.com/microsoft/OpenAPI.NET/issues/2896)) ([c79a83e](https://github.com/microsoft/OpenAPI.NET/commit/c79a83e74a0a41367c37f050d78d3e0ace838bc0))
+* use async method for crypto flush ([677b519](https://github.com/microsoft/OpenAPI.NET/commit/677b5197d9c4f7de2122852ad49d5012f7082e71))
+
 ## [2.9.0](https://github.com/microsoft/OpenAPI.NET/compare/v2.8.0...v2.9.0) (2026-06-10)
 
 

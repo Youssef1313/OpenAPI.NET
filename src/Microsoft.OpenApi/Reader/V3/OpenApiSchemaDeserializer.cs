@@ -395,7 +395,7 @@ namespace Microsoft.OpenApi.Reader.V3
                 schema.Extensions.Remove(OpenApiConstants.NullableExtension);
             }
 
-            if (schema.Type is null && schema.Enum is { Count: 1 } &&
+            if ((schema.Type is null or JsonSchemaType.Null) && schema.Enum is { Count: 1 } &&
                 schema.Enum[0].IsJsonNullSentinel())
             {
                 schema.Enum = null;

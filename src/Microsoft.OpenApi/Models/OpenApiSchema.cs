@@ -521,20 +521,17 @@ namespace Microsoft.OpenApi
             IList<IOpenApiSchema>? effectiveOneOf = OneOf;
             IList<IOpenApiSchema>? effectiveAnyOf = AnyOf;
             bool hasNullInComposition = false;
-            JsonSchemaType? inferredType = null;
 
             if (version == OpenApiSpecVersion.OpenApi3_0)
             {
-                (effectiveOneOf, var inferredOneOf, var nullInOneOf) = ProcessCompositionForNull(OneOf);
+                (effectiveOneOf, var nullInOneOf) = ProcessCompositionForNull(OneOf);
                 hasNullInComposition |= nullInOneOf;
-                inferredType = inferredOneOf ?? inferredType;
-                (effectiveAnyOf, var inferredAnyOf, var nullInAnyOf) = ProcessCompositionForNull(AnyOf);
+                (effectiveAnyOf, var nullInAnyOf) = ProcessCompositionForNull(AnyOf);
                 hasNullInComposition |= nullInAnyOf;
-                inferredType = inferredAnyOf ?? inferredType;
             }
 
             // type
-            SerializeTypeProperty(writer, version, inferredType);
+            SerializeTypeProperty(writer, version);
 
             // allOf
             writer.WriteOptionalCollection(OpenApiConstants.AllOf, AllOf, callback);
@@ -971,10 +968,9 @@ namespace Microsoft.OpenApi
             writer.WriteEndObject();
         }
 
-        private void SerializeTypeProperty(IOpenApiWriter writer, OpenApiSpecVersion version, JsonSchemaType? inferredType = null)
+        private void SerializeTypeProperty(IOpenApiWriter writer, OpenApiSpecVersion version)
         {
-            // Use original type or inferred type when the explicit type is not set
-            var typeToUse = Type ?? inferredType;
+            var typeToUse = Type;
 
             if (typeToUse is null)
             {
@@ -1050,14 +1046,14 @@ namespace Microsoft.OpenApi
         /// Processes a composition (oneOf or anyOf) for null types, filtering out null schemas and inferring common type.
         /// </summary>
         /// <param name="composition">The list of schemas in the composition.</param>
-        /// <returns>A tuple with the effective list, inferred type, and whether null is present in composition.</returns>
-        private static (IList<IOpenApiSchema>? effective, JsonSchemaType? inferredType, bool hasNullInComposition)
+        /// <returns>A tuple with the effective list and whether null is present in composition.</returns>
+        private static (IList<IOpenApiSchema>? effective, bool hasNullInComposition)
             ProcessCompositionForNull(IList<IOpenApiSchema>? composition)
         {
             if (composition is null || !composition.Any(static s => s.Type is JsonSchemaType.Null))
             {
                 // Nothing to patch
-                return (composition, null, false);
+                return (composition, false);
             }
 
             var nonNullSchemas = composition
@@ -1066,18 +1062,11 @@ namespace Microsoft.OpenApi
 
             if (nonNullSchemas.Count > 0)
             {
-                JsonSchemaType commonType = 0;
-
-                foreach (var schema in nonNullSchemas)
-                {
-                    commonType |= schema.Type.GetValueOrDefault() & ~JsonSchemaType.Null;
-                }
-
-                return (nonNullSchemas, commonType, true);
+                return (nonNullSchemas, true);
             }
             else
             {
-                return (null, null, true);
+                return (null, true);
             }
         }
 

@@ -956,7 +956,6 @@ namespace Microsoft.OpenApi.Tests.Models
             var expectedV3Schema =
                 """
                 {
-                  "type": "string",
                   "oneOf": [
                     {
                       "maxLength": 10,
@@ -1045,7 +1044,6 @@ namespace Microsoft.OpenApi.Tests.Models
             var expectedV3Schema =
                 """
                 {
-                  "type": "object",
                   "anyOf": [
                     {
                       "type": "object",
@@ -1227,7 +1225,6 @@ namespace Microsoft.OpenApi.Tests.Models
             var expectedV3Schema =
                 """
                 {
-                  "type": "object",
                   "oneOf": [
                     {
                       "$ref": "#/components/schemas/Pet"

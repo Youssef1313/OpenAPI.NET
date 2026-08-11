@@ -510,11 +510,13 @@ namespace Microsoft.OpenApi
             });
 
             // enum
-            var enumValue = Enum is not { Count: > 0 }
-                && !string.IsNullOrEmpty(Const)
-                && version < OpenApiSpecVersion.OpenApi3_1
-                ? new List<JsonNode> { JsonValue.Create(Const)! }
-                : Enum;
+            var enumValue = Type is JsonSchemaType.Null && version == OpenApiSpecVersion.OpenApi3_0
+                ? new List<JsonNode> { JsonNullSentinel.JsonNull }
+                : Enum is not { Count: > 0 }
+                    && !string.IsNullOrEmpty(Const)
+                    && version < OpenApiSpecVersion.OpenApi3_1
+                    ? new List<JsonNode> { JsonValue.Create(Const)! }
+                    : Enum;
             writer.WriteOptionalCollection(OpenApiConstants.Enum, enumValue, (nodeWriter, s) => nodeWriter.WriteAny(s));
 
             // Handle oneOf/anyOf with null type for v3.0 downcast

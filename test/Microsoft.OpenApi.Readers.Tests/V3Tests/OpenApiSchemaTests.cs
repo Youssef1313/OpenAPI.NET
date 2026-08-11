@@ -533,7 +533,12 @@ nullable: true";
         public async Task SerializeSchemaWithOnlyNullableShouldSucceed()
         {
             // Arrange
-            var expected = @"nullable: true";
+            var expected =
+                """
+                enum:
+                  - null
+                nullable: true
+                """;
 
             var path = Path.Combine(SampleFolderPath, "schemaWithOnlyNullable.yaml");
 
